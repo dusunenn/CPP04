@@ -3,7 +3,6 @@ NAME = AnimalTest
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRCDIR = .
 SOURCES = main.cpp Animal.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
