@@ -3,7 +3,7 @@ NAME = AnimalTest
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SOURCES = main.cpp Animal.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp Brain.cpp
+SOURCES = main.cpp AAnimal.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp Brain.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 all: $(NAME)
