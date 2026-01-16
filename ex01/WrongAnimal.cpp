@@ -10,6 +10,7 @@ WrongAnimal::WrongAnimal(std::string type) : type(type) {
 
 WrongAnimal::WrongAnimal(const WrongAnimal& other) : type(other.type) {
     std::cout << "WrongAnimal: copy constructor called" << std::endl;
+    *this = other;
 }
 
 WrongAnimal& WrongAnimal::operator=(const WrongAnimal& other) {

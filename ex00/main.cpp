@@ -5,59 +5,65 @@
 #include "WrongAnimal.hpp"
 #include "WrongCat.hpp"
 
-// Konsol çıktılarını renklendirmek için (İsteğe bağlı, okunabilirliği artırır)
-#define RESET   "\033[0m"
-#define RED     "\033[31m"
-#define GREEN   "\033[32m"
-#define YELLOW  "\033[33m"
-#define BLUE    "\033[34m"
-
 int main()
 {
-    // --------------------------------------------------------------------
-    // BÖLÜM 1: PDF'teki Zorunlu Test (Subject Test)
-    // --------------------------------------------------------------------
-    std::cout << BLUE << "\n=== 1. SUBJECT TEST (Polymorphism Working) ===" << RESET << std::endl;
+    // =========================================================
+    // BÖLÜM 1: Doğru Polymorphism (PDF'teki Örnek)
+    // =========================================================
+    std::cout << "\n----- 1. Subject Test (Polymorphism Working) -----" << std::endl;
 
     const Animal* meta = new Animal();
     const Animal* j = new Dog();
     const Animal* i = new Cat();
 
-    std::cout << j->getType() << " " << std::endl;
-    std::cout << i->getType() << " " << std::endl;
-    i->makeSound(); //will output the cat sound!
-    j->makeSound();
-    meta->makeSound();
-    std::cout << "\n" << RED << "Destructors:" << RESET << std::endl;
-    delete i;    // Önce ~Cat(), sonra ~Animal() çağrılmalı
-    delete j;    // Önce ~Dog(), sonra ~Animal() çağrılmalı
-    delete meta; // Sadece ~Animal() çağrılmalı
+    // Tipleri yazdır (Dog ve Cat olarak gelmeli)
+    std::cout << "J Type: " << j->getType() << " " << std::endl;
+    std::cout << "I Type: " << i->getType() << " " << std::endl;
 
+    // Sesleri Çıkar (Virtual olduğu için kendi sesleri çıkmalı)
+    std::cout << "Cat Sound: ";
+    i->makeSound(); // ÇIKTI: Meow! Meow!
     
-    // --------------------------------------------------------------------
-    // BÖLÜM 2: Yanlış Sınıf Testi (Wrong Class Test)
-    // Bu kısım 'virtual' kullanılmazsa ne olacağını kanıtlar.
-    // --------------------------------------------------------------------
-    std::cout << BLUE << "\n=== 2. WRONG ANIMAL TEST (Polymorphism FAIL) ===" << RESET << std::endl;
+    std::cout << "Dog Sound: ";
+    j->makeSound(); // ÇIKTI: Woof! Woof!
+    
+    std::cout << "Animal Sound: ";
+    meta->makeSound();
+
+    // =========================================================
+    // BÖLÜM 2: Yanlış Polymorphism (WrongAnimal Testi)
+    // =========================================================
+    std::cout << "\n----- 2. Wrong Animal Test (No Virtual Function) -----" << std::endl;
 
     const WrongAnimal* wrongMeta = new WrongAnimal();
-    const WrongAnimal* wrongCat = new WrongCat(); // Dikkat: Pointer tipi WrongAnimal
+    const WrongAnimal* wrongCat = new WrongCat();
 
-    std::cout << "\n" << YELLOW << "Types:" << RESET << std::endl;
-    std::cout << "wrongCat is a: " << wrongCat->getType() << " " << std::endl;
+    std::cout << "WrongCat Type: " << wrongCat->getType() << " " << std::endl;
 
-    std::cout << "\n" << YELLOW << "Sounds (Expectation: WrongCat sounds like WrongAnimal):" << RESET << std::endl;
+    // BURASI KRİTİK NOKTA:
+    // Fonksiyon 'virtual' olmadığı için, işaretçinin türüne (WrongAnimal)
+    // ait fonksiyon çağrılır. "Wrong Meow" yerine genel ses çıkar.
+    std::cout << "WrongCat Sound: ";
+    wrongCat->makeSound(); // ÇIKTI: WrongAnimal makes a weird sound...
     
-    std::cout << "WrongCat makes: ";
-    wrongCat->makeSound(); 
-    // BEKLENEN: WrongAnimal sesi çıkmalı! (Çünkü virtual değil)
-    // EĞER "Miyav" derse WrongAnimal sınıfında yanlışlıkla virtual kullandınız demektir.
-
-    std::cout << "WrongAnimal makes: ";
+    std::cout << "WrongAnimal Sound: ";
     wrongMeta->makeSound();
 
-    std::cout << "\n" << RED << "Destructors:" << RESET << std::endl;
-    delete wrongCat;  // Eğer WrongAnimal destructor'ı virtual değilse, SADECE WrongAnimal silinir (Leak!)
+    // =========================================================
+    // BÖLÜM 3: Temizlik (Memory Cleanup)
+    // =========================================================
+    std::cout << "\n----- 3. Destructors (Cleaning Memory) -----" << std::endl;
+    
+    // Doğru Sınıfları Silme (Virtual Destructor sayesinde güvenli)
+    delete j;
+    delete i;
+    delete meta;
+
+    // Yanlış Sınıfları Silme
+    // Uyarı: WrongAnimal'da destructor virtual olmadığı için
+    // sadece WrongAnimal kısmı silinir, WrongCat kısmı bellekte kalabilir (leak).
+    // Ancak egzersiz bu hatayı göstermek üzerine kurulu olduğu için böyle bırakıyoruz.
+    delete wrongCat;
     delete wrongMeta;
 
     return 0;
