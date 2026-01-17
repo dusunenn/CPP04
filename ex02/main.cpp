@@ -5,71 +5,85 @@
 #include "WrongAnimal.hpp"
 #include "WrongCat.hpp"
 
+#define RESET   "\033[0m"
+#define GREEN   "\033[32m"
+#define RED     "\033[31m"
+#define CYAN    "\033[36m"
+#define YELLOW  "\033[33m"
+
 int main()
 {
-    std::cout << "=========================================" << std::endl;
-    std::cout << "       BOLUM 1: SOYUT SINIF TESTI        " << std::endl;
-    std::cout << "=========================================" << std::endl;
+    std::cout << CYAN << "\n=========================================" << RESET << std::endl;
+    std::cout << CYAN << "    TEST 0: ABSTRACT CLASS CHECK         " << RESET << std::endl;
+    std::cout << CYAN << "=========================================" << RESET << std::endl;
 
-    // AAnimal soyut bir sınıf olduğu için aşağıdaki satır HATA verir.
-    // Derleyicinin hata vereceğini görmek için yorum satırını kaldırabilirsin.
+    std::cout << YELLOW << ">> Trying to instantiate AAnimal..." << RESET << std::endl;
     
-    // const AAnimal* meta = new AAnimal(); 
-    // std::cout << "Bunu goremezsin cunku derlenmez." << std::endl;
+    // AAnimal* meta = new AAnimal();
 
-    std::cout << ">> new AAnimal() yapilamiyor (Basarili)." << std::endl;
-    std::cout << ">> Ancak AAnimal* isaretcisi kullanilabilir.\n" << std::endl;
-
-    const AAnimal* j = new Dog();
-    const AAnimal* i = new Cat();
-
-    std::cout << "j'nin Tipi: " << j->getType() << std::endl;
-    std::cout << "i'nin Tipi: " << i->getType() << std::endl;
-
-    std::cout << "\n[Ses Testi]" << std::endl;
-    j->makeSound(); // Dog::makeSound() çalışır
-    i->makeSound(); // Cat::makeSound() çalışır
-
-    delete j; // Önce ~Dog(), sonra ~Brain(), sonra ~AAnimal()
-    delete i; // Önce ~Cat(), sonra ~Brain(), sonra ~AAnimal()
+    std::cout << GREEN << ">> 'new AAnimal()' causes compilation error." << RESET << std::endl;
+    std::cout << ">> SUCCESS: AAnimal is abstract." << std::endl;
 
 
-    std::cout << "\n\n=========================================" << std::endl;
-    std::cout << "       BOLUM 2: DERIN KOPYALAMA TESTI    " << std::endl;
-    std::cout << "=========================================" << std::endl;
+    std::cout << CYAN << "\n=========================================" << RESET << std::endl;
+    std::cout << CYAN << "    TEST 1: ARRAY OF ANIMALS (SUBJECT)   " << RESET << std::endl;
+    std::cout << CYAN << "=========================================" << RESET << std::endl;
 
-    std::cout << ">> Bir kopek olusturuluyor (Kopek 1)..." << std::endl;
+    const int count = 4;
+    const AAnimal* animals[count];
+
+    std::cout << YELLOW << ">> Creating Animals..." << RESET << std::endl;
+    for (int i = 0; i < count / 2; i++) {
+        animals[i] = new Dog();
+    }
+    for (int i = count / 2; i < count; i++) {
+        animals[i] = new Cat();
+    }
+
+    std::cout << "\n[Sound Test]" << std::endl;
+    animals[0]->makeSound();
+    animals[count - 1]->makeSound();
+
+    std::cout << YELLOW << "\n>> Deleting Animals (Destructor Chain)..." << RESET << std::endl;
+    for (int i = 0; i < count; i++) {
+        delete animals[i];
+    }
+    std::cout << GREEN << ">> Array cleaned. (Success if no memory leaks)" << RESET << std::endl;
+
+
+    std::cout << CYAN << "\n=========================================" << RESET << std::endl;
+    std::cout << CYAN << "    TEST 2: DEEP COPY PROOF              " << RESET << std::endl;
+    std::cout << CYAN << "=========================================" << RESET << std::endl;
+
+    std::cout << YELLOW << ">> Creating Dog 1..." << RESET << std::endl;
     Dog* dog1 = new Dog();
     
-    // Kopek 1'in beynine bir fikir ekleyelim
-    // Not: Dog sınıfında getBrain() metodunu public varsayıyoruz.
     if (dog1->getBrain())
-        dog1->getBrain()->ideas[0] = "KEMIK ISTIYORUM!";
-    
-    std::cout << ">> Kopek 1'den Kopek 2 kopyalaniyor (Copy Constructor)..." << std::endl;
+        dog1->getBrain()->ideas[0] = "I want a bone!";
+
+    std::cout << YELLOW << ">> Creating Dog 2 as a copy of Dog 1 (Copy Constructor)..." << RESET << std::endl;
     Dog* dog2 = new Dog(*dog1);
 
-    std::cout << "\n[Degisiklikten Once]" << std::endl;
-    std::cout << "Kopek 1 Fikri: " << dog1->getBrain()->ideas[0] << std::endl;
-    std::cout << "Kopek 2 Fikri: " << dog2->getBrain()->ideas[0] << std::endl;
+    std::cout << "\n[Check Before Modification]" << std::endl;
+    std::cout << "Dog 1 Idea: " << dog1->getBrain()->ideas[0] << std::endl;
+    std::cout << "Dog 2 Idea: " << dog2->getBrain()->ideas[0] << std::endl;
 
-    // Simdi Kopek 2'nin fikrini degistirelim
-    std::cout << "\n>> Kopek 2'nin fikri degistiriliyor..." << std::endl;
-    dog2->getBrain()->ideas[0] = "UYUMAK ISTIYORUM...";
+    std::cout << YELLOW << "\n>> Modifying Dog 2's idea..." << RESET << std::endl;
+    if (dog2->getBrain())
+        dog2->getBrain()->ideas[0] = "I want to sleep...";
 
-    std::cout << "\n[Degisiklikten Sonra (Bagimsizlik Kontrolu)]" << std::endl;
-    std::cout << "Kopek 1 Fikri: " << dog1->getBrain()->ideas[0] << " (Degismemeli)" << std::endl;
-    std::cout << "Kopek 2 Fikri: " << dog2->getBrain()->ideas[0] << " (Degismeli)" << std::endl;
+    std::cout << "\n[Check After Modification (Independence Check)]" << std::endl;
+    std::cout << "Dog 1 Idea: " << dog1->getBrain()->ideas[0] << " (Should stay 'I want a bone!')" << std::endl;
+    std::cout << "Dog 2 Idea: " << dog2->getBrain()->ideas[0] << " (Should change to 'I want to sleep...')" << std::endl;
 
-    // Hafıza Adreslerini Kontrol Et
-    std::cout << "\n[Adres Kontrolu]" << std::endl;
-    std::cout << "Kopek 1 Beyin Adresi: " << dog1->getBrain() << std::endl;
-    std::cout << "Kopek 2 Beyin Adresi: " << dog2->getBrain() << std::endl;
-
-    if (dog1->getBrain() != dog2->getBrain())
-        std::cout << ">> BASARILI: Beyin adresleri farkli (Deep Copy)." << std::endl;
-    else
-        std::cout << ">> HATA: Beyin adresleri ayni (Shallow Copy)!" << std::endl;
+    if (dog1->getBrain() != dog2->getBrain() && 
+        dog1->getBrain()->ideas[0] != dog2->getBrain()->ideas[0]) {
+        std::cout << GREEN << "\n>> SUCCESS: Ideas and Addresses are different! (Deep Copy works)" << RESET << std::endl;
+        std::cout << ">> Dog 1 Brain Address: " << dog1->getBrain() << std::endl;
+        std::cout << ">> Dog 2 Brain Address: " << dog2->getBrain() << std::endl;
+    } else {
+        std::cout << RED << "\n>> FAILURE: Ideas/Addresses are the same! (Shallow Copy detected)" << RESET << std::endl;
+    }
 
     delete dog1;
     delete dog2;

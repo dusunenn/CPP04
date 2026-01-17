@@ -4,66 +4,77 @@
 #include "Cat.hpp"
 #include "Brain.hpp"
 
+ 
+#define RESET   "\033[0m"
+#define GREEN   "\033[32m"
+#define RED     "\033[31m"
+#define CYAN    "\033[36m"
+#define YELLOW  "\033[33m"
+
 int main()
 {
-    // =========================================================
-    // TEST 1: PDF Gereksinimi (Array of Animals)
-    // =========================================================
-    std::cout << "----- TEST 1: Array of Animals -----" << std::endl;
-    
-    const int arraySize = 4; // Toplam hayvan sayısı (Örnek için 4, PDF'te sayı belirtilmemiş ama çift sayı iyi olur)
-    const Animal* animals[arraySize]; // Animal işaretçileri dizisi
+    std::cout << CYAN << "=========================================" << RESET << std::endl;
+    std::cout << CYAN << "    TEST 1: ARRAY OF ANIMALS (SUBJECT)   " << RESET << std::endl;
+    std::cout << CYAN << "=========================================" << RESET << std::endl;
 
-    // Dizinin yarısını Dog, yarısını Cat ile doldur
-    for (int i = 0; i < arraySize / 2; i++) {
+    const int count = 6;
+    const Animal* animals[count];
+
+    std::cout << YELLOW << ">> Creating Animals..." << RESET << std::endl;
+    for (int i = 0; i < count / 2; i++) {
         animals[i] = new Dog();
     }
-    for (int i = arraySize / 2; i < arraySize; i++) {
+    for (int i = count / 2; i < count; i++) {
         animals[i] = new Cat();
     }
 
-    // Hayvanların seslerini test edelim
-    std::cout << "\n--- Sounds ---" << std::endl;
-    animals[0]->makeSound(); // Woof
-    animals[3]->makeSound(); // Meow
 
-    // Hepsini sil (Destructor zinciri ve Memory Leak kontrolü için)
-    std::cout << "\n--- Deleting Animals ---" << std::endl;
-    for (int i = 0; i < arraySize; i++) {
+    std::cout << "\n[Sound Test]" << std::endl;
+    animals[0]->makeSound();
+    animals[count - 1]->makeSound();
+
+
+    std::cout << YELLOW << "\n>> Deleting Animals (Destructor Chain)..." << RESET << std::endl;
+    for (int i = 0; i < count; i++) {
         delete animals[i];
     }
+    std::cout << GREEN << ">> Array cleaned. (Success if no memory leaks)" << RESET << std::endl;
 
-    // =========================================================
-    // TEST 2: Deep Copy Kanıtı
-    // =========================================================
-    std::cout << "\n\n----- TEST 2: Deep Copy Proof -----" << std::endl;
 
+    std::cout << CYAN << "\n\n=========================================" << RESET << std::endl;
+    std::cout << CYAN << "    TEST 2: DEEP COPY PROOF              " << RESET << std::endl;
+    std::cout << CYAN << "=========================================" << RESET << std::endl;
+
+
+    std::cout << YELLOW << ">> Creating Dog 1..." << RESET << std::endl;
     Dog* dog1 = new Dog();
     
-    // Dog1'in beynine bir fikir koyalım
-    dog1->getBrain()->ideas[0] = "I want a bone!";
-    
-    // Dog2'yi Dog1'den kopyalayalım (Copy Constructor çalışır)
+    if (dog1->getBrain())
+        dog1->getBrain()->ideas[0] = "I want a bone!";
+
+    std::cout << YELLOW << ">> Creating Dog 2 as a copy of Dog 1 (Copy Constructor)..." << RESET << std::endl;
     Dog* dog2 = new Dog(*dog1);
 
-    std::cout << "\nBefore Modification:" << std::endl;
-    std::cout << "Dog1 Idea: " << dog1->getBrain()->ideas[0] << std::endl;
-    std::cout << "Dog2 Idea: " << dog2->getBrain()->ideas[0] << std::endl;
+    std::cout << "\n[Check Before Modification]" << std::endl;
+    std::cout << "Dog 1 Idea: " << dog1->getBrain()->ideas[0] << std::endl;
+    std::cout << "Dog 2 Idea: " << dog2->getBrain()->ideas[0] << std::endl;
 
-    // Dog2'nin fikrini değiştirelim
-    dog2->getBrain()->ideas[0] = "I want to sleep!";
+    std::cout << YELLOW << "\n>> Modifying Dog 2's idea..." << RESET << std::endl;
+    if (dog2->getBrain())
+        dog2->getBrain()->ideas[0] = "I want to sleep...";
 
-    std::cout << "\nAfter Modification (Check Independence):" << std::endl;
-    std::cout << "Dog1 Idea: " << dog1->getBrain()->ideas[0] << " (Should stay 'I want a bone!')" << std::endl;
-    std::cout << "Dog2 Idea: " << dog2->getBrain()->ideas[0] << " (Should be 'I want to sleep!')" << std::endl;
+    std::cout << "\n[Check After Modification (Independence Check)]" << std::endl;
+    std::cout << "Dog 1 Idea: " << dog1->getBrain()->ideas[0] << " (Should stay 'I want a bone!')" << std::endl;
+    std::cout << "Dog 2 Idea: " << dog2->getBrain()->ideas[0] << " (Should change to 'I want to sleep...')" << std::endl;
 
-    // Deep Copy Başarılı mı?
-    if (dog1->getBrain()->ideas[0] != dog2->getBrain()->ideas[0])
-        std::cout << "\nSUCCESS: Deep Copy works! Brains are independent." << std::endl;
-    else
-        std::cout << "\nFAILURE: Shallow Copy detected! Brains are shared." << std::endl;
+    if (dog1->getBrain()->ideas[0] != dog2->getBrain()->ideas[0]) {
+        std::cout << GREEN << "\n>> SUCCESS: Ideas are different! (Deep Copy works)" << RESET << std::endl;
+        std::cout << GREEN << ">> Dog 1 Brain Address: " << dog1->getBrain() << RESET << std::endl;
+        std::cout << GREEN << ">> Dog 2 Brain Address: " << dog2->getBrain() << RESET << std::endl;
+    } else {
+        std::cout << RED << "\n>> FAILURE: Ideas are the same! (Shallow Copy detected)" << RESET << std::endl;
+    }
 
-    // Temizlik
     delete dog1;
     delete dog2;
 

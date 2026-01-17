@@ -1,6 +1,5 @@
 #include "Cat.hpp"
 
-
 Cat::Cat() {
     this->type = "Cat";
     this->brain = new Brain();
@@ -27,6 +26,7 @@ Cat::~Cat() {
 }
 
 void Cat::makeSound() const {
+    AAnimal::makeSound();
     std::cout << "Meow! Meow!" << std::endl;
 }
 

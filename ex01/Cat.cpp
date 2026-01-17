@@ -1,6 +1,5 @@
 #include "Cat.hpp"
 
-
 Cat::Cat() {
     this->type = "Cat";
     this->brain = new Brain();

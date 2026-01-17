@@ -7,32 +7,23 @@
 
 int main()
 {
-    // =========================================================
-    // BÖLÜM 1: Doğru Polymorphism (PDF'teki Örnek)
-    // =========================================================
     std::cout << "\n----- 1. Subject Test (Polymorphism Working) -----" << std::endl;
 
     const Animal* meta = new Animal();
     const Animal* j = new Dog();
     const Animal* i = new Cat();
 
-    // Tipleri yazdır (Dog ve Cat olarak gelmeli)
     std::cout << "J Type: " << j->getType() << " " << std::endl;
     std::cout << "I Type: " << i->getType() << " " << std::endl;
 
-    // Sesleri Çıkar (Virtual olduğu için kendi sesleri çıkmalı)
     std::cout << "Cat Sound: ";
-    i->makeSound(); // ÇIKTI: Meow! Meow!
+    i->makeSound();
     
     std::cout << "Dog Sound: ";
-    j->makeSound(); // ÇIKTI: Woof! Woof!
-    
+    j->makeSound();
     std::cout << "Animal Sound: ";
     meta->makeSound();
 
-    // =========================================================
-    // BÖLÜM 2: Yanlış Polymorphism (WrongAnimal Testi)
-    // =========================================================
     std::cout << "\n----- 2. Wrong Animal Test (No Virtual Function) -----" << std::endl;
 
     const WrongAnimal* wrongMeta = new WrongAnimal();
@@ -40,21 +31,16 @@ int main()
 
     std::cout << "WrongCat Type: " << wrongCat->getType() << " " << std::endl;
 
-    // BURASI KRİTİK NOKTA:
-    // Fonksiyon 'virtual' olmadığı için, işaretçinin türüne (WrongAnimal)
-    // ait fonksiyon çağrılır. "Wrong Meow" yerine genel ses çıkar.
+
     std::cout << "WrongCat Sound: ";
-    wrongCat->makeSound(); // ÇIKTI: WrongAnimal makes a weird sound...
+    wrongCat->makeSound();
     
     std::cout << "WrongAnimal Sound: ";
     wrongMeta->makeSound();
 
-    // =========================================================
-    // BÖLÜM 3: Temizlik (Memory Cleanup)
-    // =========================================================
     std::cout << "\n----- 3. Destructors (Cleaning Memory) -----" << std::endl;
     
-    // Doğru Sınıfları Silme (Virtual Destructor sayesinde güvenli)
+
     delete j;
     delete i;
     delete meta;
@@ -68,3 +54,24 @@ int main()
 
     return 0;
 }
+/*Derleyici bakar: "j bir Animal işaretçisi."
+
+Derleyici Animal sınıfına gider ve makeSound fonksiyonuna bakar.
+
+Fonksiyonun başında virtual kelimesini görür.
+
+Derleyici der ki: "Tamam, bu fonksiyon sanal. O yüzden ben bu işaretçinin tipine (Animal) bakarak karar vermeyeceğim. Program çalıştığında (Runtime) bu işaretçi gerçekten neyi gösteriyorsa (Dog) onun fonksiyonunu çağıracağım."
+
+Program çalışır, hafızadaki nesnenin Dog olduğunu görür ve Dog::makeSound çalışır.*/
+
+
+
+/*Derleyici bakar: "wrongCat bir WrongAnimal işaretçisi."
+
+    Derleyici WrongAnimal sınıfına gider ve makeSound fonksiyonuna bakar.
+
+    Fonksiyonun başında virtual YOKTUR.
+
+    Derleyici der ki: "Bu fonksiyon sanal değil. O zaman işaretçi neyse fonksiyon da odur. Bu bir WrongAnimal işaretçisi olduğuna göre WrongAnimal::makeSound çalışacak. İşaretçinin bellekte neyi tuttuğu (WrongCat) umurumda değil." (Buna Static Binding denir).
+
+    Çıktı: Some generic wrong animal sound (Halbuki WrongCat nesnesiydi!)*/

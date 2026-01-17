@@ -20,9 +20,6 @@ AAnimal::~AAnimal() {
     std::cout << "AAnimal destructor called" << std::endl;
 }
 
-// DİKKAT: AAnimal::makeSound() implementasyonunu SİLDİK.
-// Çünkü o artık = 0;
-
 std::string AAnimal::getType() const {
     return this->type;
 }

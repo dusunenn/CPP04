@@ -15,10 +15,7 @@ public:
     Dog &operator=(const Dog &other);
     ~Dog();
 
-    // Bu fonksiyonu implemente etmek ZORUNDAYIZ.
-    // Etmezsek Dog sınıfı da soyut olur ve new Dog() diyemeyiz.
     virtual void makeSound() const;
-
     Brain *getBrain() const;
 };
 
