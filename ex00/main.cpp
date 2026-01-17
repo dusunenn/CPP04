@@ -7,51 +7,48 @@
 
 int main()
 {
-    std::cout << "\n----- 1. Subject Test (Polymorphism Working) -----" << std::endl;
+    {
+        std::cout << "\n----- 1. Subject Test (Polymorphism Working) -----" << std::endl;
 
-    const Animal* meta = new Animal();
-    const Animal* j = new Dog();
-    const Animal* i = new Cat();
+        const Animal* meta = new Animal();
+        const Animal* j = new Dog();
+        const Animal* i = new Cat();
 
-    std::cout << "J Type: " << j->getType() << " " << std::endl;
-    std::cout << "I Type: " << i->getType() << " " << std::endl;
+        std::cout << "J Type: " << j->getType() << " " << std::endl;
+        std::cout << "I Type: " << i->getType() << " " << std::endl;
 
-    std::cout << "Cat Sound: ";
-    i->makeSound();
-    
-    std::cout << "Dog Sound: ";
-    j->makeSound();
-    std::cout << "Animal Sound: ";
-    meta->makeSound();
+        std::cout << "Cat Sound: ";
+        i->makeSound();
+        
+        std::cout << "Dog Sound: ";
+        j->makeSound();
+        std::cout << "Animal Sound: ";
+        meta->makeSound();
 
-    std::cout << "\n----- 2. Wrong Animal Test (No Virtual Function) -----" << std::endl;
+        delete j;
+        delete i;
+        delete meta;
+    }
+    // {
+    //     std::cout << "\n----- 2. Wrong Animal Test (No Virtual Function) -----" << std::endl;
 
-    const WrongAnimal* wrongMeta = new WrongAnimal();
-    const WrongAnimal* wrongCat = new WrongCat();
+    //     const WrongAnimal* wrongMeta = new WrongAnimal();
+    //     const WrongAnimal* wrongCat = new WrongCat();
 
-    std::cout << "WrongCat Type: " << wrongCat->getType() << " " << std::endl;
+    //     std::cout << "WrongCat Type: " << wrongCat->getType() << " " << std::endl;
 
 
-    std::cout << "WrongCat Sound: ";
-    wrongCat->makeSound();
-    
-    std::cout << "WrongAnimal Sound: ";
-    wrongMeta->makeSound();
+    //     std::cout << "WrongCat Sound: ";
+    //     wrongCat->makeSound();
+        
+    //     std::cout << "WrongAnimal Sound: ";
+    //     wrongMeta->makeSound();
 
-    std::cout << "\n----- 3. Destructors (Cleaning Memory) -----" << std::endl;
-    
+    //     std::cout << "\n----- 3. Destructors (Cleaning Memory) -----" << std::endl;
 
-    delete j;
-    delete i;
-    delete meta;
-
-    // Yanlış Sınıfları Silme
-    // Uyarı: WrongAnimal'da destructor virtual olmadığı için
-    // sadece WrongAnimal kısmı silinir, WrongCat kısmı bellekte kalabilir (leak).
-    // Ancak egzersiz bu hatayı göstermek üzerine kurulu olduğu için böyle bırakıyoruz.
-    delete wrongCat;
-    delete wrongMeta;
-
+    //     delete wrongCat;
+    //     delete wrongMeta;
+    // }
     return 0;
 }
 /*Derleyici bakar: "j bir Animal işaretçisi."
