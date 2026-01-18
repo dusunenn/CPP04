@@ -6,13 +6,14 @@ AAnimal::AAnimal() : type("AAnimal") {
 
 AAnimal::AAnimal(const AAnimal& other) {
     std::cout << "AAnimal copy constructor called" << std::endl;
-    *this = other;
+    this->type = other.type;
 }
 
 AAnimal& AAnimal::operator=(const AAnimal& other) {
     if (this != &other) {
         this->type = other.type;
     }
+    std::cout << "AAnimal copy assignment operator called" << std::endl;
     return *this;
 }
 
