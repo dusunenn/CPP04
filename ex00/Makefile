@@ -1,4 +1,4 @@
-NAME = AnimalTest
+NAME = Polymorphism
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
