@@ -51,24 +51,3 @@ int main()
     // }
     return 0;
 }
-/*Derleyici bakar: "j bir Animal işaretçisi."
-
-Derleyici Animal sınıfına gider ve makeSound fonksiyonuna bakar.
-
-Fonksiyonun başında virtual kelimesini görür.
-
-Derleyici der ki: "Tamam, bu fonksiyon sanal. O yüzden ben bu işaretçinin tipine (Animal) bakarak karar vermeyeceğim. Program çalıştığında (Runtime) bu işaretçi gerçekten neyi gösteriyorsa (Dog) onun fonksiyonunu çağıracağım."
-
-Program çalışır, hafızadaki nesnenin Dog olduğunu görür ve Dog::makeSound çalışır.*/
-
-
-
-/*Derleyici bakar: "wrongCat bir WrongAnimal işaretçisi."
-
-    Derleyici WrongAnimal sınıfına gider ve makeSound fonksiyonuna bakar.
-
-    Fonksiyonun başında virtual YOKTUR.
-
-    Derleyici der ki: "Bu fonksiyon sanal değil. O zaman işaretçi neyse fonksiyon da odur. Bu bir WrongAnimal işaretçisi olduğuna göre WrongAnimal::makeSound çalışacak. İşaretçinin bellekte neyi tuttuğu (WrongCat) umurumda değil." (Buna Static Binding denir).
-
-    Çıktı: Some generic wrong animal sound (Halbuki WrongCat nesnesiydi!)*/
